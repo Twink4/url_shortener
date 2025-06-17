@@ -2,6 +2,17 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 env_path = ".env"
 
+
+class ServerConfig(BaseSettings):
+    domain: str
+    
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_prefix="SERVER_",
+        extra="ignore"
+    )
+
+
 class DatabaseConfig(BaseSettings):
     
     username: str
@@ -14,6 +25,7 @@ class DatabaseConfig(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=env_path,
         env_prefix="DB_",
+        extra="ignore"
     )
     
     
@@ -24,8 +36,10 @@ class DatabaseConfig(BaseSettings):
     
 class Settings(BaseSettings):
     db_config: DatabaseConfig
+    server_config: ServerConfig
         
 
 settings = Settings(
-    db_config=DatabaseConfig() # type: ignore
+    db_config=DatabaseConfig(), # type: ignore
+    server_config=ServerConfig() # type: ignore
 )
